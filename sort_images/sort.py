@@ -64,13 +64,13 @@ def resolve_my_format(path: Path, frmt):
             .replace("%NAME", path.name))
 
 
-def sort_file(path: Path, dst: Path, frmt, dry_run=False):
+def sort_file(path: Path, dst: Path, frmt, dry_run=False, move=False):
     try:
         new_path = dst / resolve_my_format(path, frmt)
     except PIL.UnidentifiedImageError:
+        new_path = dst / "error" / path.name
         log.debug(f"File {path.name} is not an image")
-        return
-    except SortException as e:
+    except SortException:
         new_path = dst / "error" / path.name
 
     if dry_run:
@@ -79,12 +79,18 @@ def sort_file(path: Path, dst: Path, frmt, dry_run=False):
         if new_path.exists():
             log.info(parse_color(f"Destination ℂ1.{new_path}ℂ. already exists"))
             return
-        log.info(f"Copying {path.name} to {new_path}")
+
+        log.debug(f"{"Moving" if move else "Copying"} {path.name} to {new_path}")
         new_path.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy(path, new_path)
+        if move:
+            shutil.move(path, new_path)
+        else:
+            shutil.copy(path, new_path)
 
 
-def sort(src: Path, dst: Path, frmt, dry_run=False):
+def sort(src: Path, dst: Path, frmt, dry_run=False, move=False):
+    log.debug(f"Sorting {src} to {dst}")
     for file in src.iterdir():
+        log.debug(f"Looking at file {file}")
         if file.is_file():
-            sort_file(file, dst, frmt, dry_run=dry_run)
+            sort_file(file, dst, frmt, dry_run=dry_run, move=move)

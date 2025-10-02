@@ -35,6 +35,7 @@ def main():
                              f"(The format is the standard python datetime format, except for the special variable %%NAME that allows "
                              f"for the insertion of the file name)", default=DEFAULT_DATE_FORMAT)
     parser.add_argument("-d", "--dry-run", action="store_true", help="Don't copy any files")
+    parser.add_argument("-m", "--move", action="store_true", help="Move files instead of copying them")
     parser.add_argument('-v', '--verbose', action='store_true', help="Show more output")
     parser.add_argument("--version", action="store_true", help="Show the current version of the program")
     parser.add_argument("SRC", help=f"The folder in which {PROGRAM_NAME} will look for images")
@@ -43,6 +44,7 @@ def main():
 
     args = parser.parse_args()
 
+    log.debug("Starting program...")
     log.setLevel(logging.DEBUG if args.verbose else logging.INFO)
 
     if args.version:
@@ -57,4 +59,5 @@ def main():
         log.error(f"Folder {src} does not exist")
         return
 
-    sort.sort(src, dst, frmt, dry_run=args.dry_run)
+    log.debug("Now starting to sort")
+    sort.sort(src, dst, frmt, dry_run=args.dry_run, move=args.move)
