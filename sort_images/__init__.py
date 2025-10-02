@@ -44,8 +44,8 @@ def main():
 
     args = parser.parse_args()
 
-    log.debug("Starting program...")
     log.setLevel(logging.DEBUG if args.verbose else logging.INFO)
+    log.debug("Starting program...")
 
     if args.version:
         log.info(f"{PROGRAM_NAME} version {program_version}")

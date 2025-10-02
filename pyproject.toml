@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "sort-images"
-version = "2025.10.19" # version
+version = "2025.10.21" # version
 authors = [
     { name = "Guenthner", email = "guenthner.jonathan@gmail.com" },
 ]

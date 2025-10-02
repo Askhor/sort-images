@@ -30,11 +30,7 @@ def super_parse_date(string):
     - hour
     - minute"""
 
-    numbers = [int(n) for n in number_re.findall(string)]
-
-    if len(numbers) > 5:
-        log.debug(f"Too many numbers in date field: {string}")
-        raise SortException(None)
+    numbers = [int(n) for n in number_re.findall(string)][:5]
 
     if len(numbers) < 1:
         log.debug(f"Too few numbers in date field: {string}")
